@@ -1,0 +1,88 @@
+<!-- 
+  new-api 首页嵌入版本
+  使用方法：复制以下全部内容到 系统设置 → 首页内容
+-->
+
+<div style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: linear-gradient(180deg, rgba(102,126,234,0.08) 0%, transparent 50%); min-height: 80vh; padding: 60px 20px; text-align: center;">
+  
+  <!-- 徽章 -->
+  <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 50px; padding: 8px 20px; margin-bottom: 32px; font-size: 14px; color: rgba(255,255,255,0.7);">
+    <span style="width: 8px; height: 8px; background: #22c55e; border-radius: 50%; display: inline-block;"></span>
+    <span>Demo 优化版 · 持续更新中</span>
+  </div>
+
+  <!-- 主标题 -->
+  <h1 style="font-size: clamp(2.5rem, 8vw, 4.5rem); font-weight: 800; line-height: 1.15; margin: 0 0 24px 0;">
+    <span style="background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">统一的</span>
+    <br>
+    大模型接口网关
+  </h1>
+
+  <!-- 副标题 -->
+  <p style="font-size: clamp(1rem, 2.5vw, 1.25rem); color: rgba(255,255,255,0.7); max-width: 500px; margin: 0 auto 40px auto; line-height: 1.6;">
+    更优惠的价格，更稳定的服务<br>
+    只需替换 API 地址，即可畅享 30+ 大模型
+  </p>
+
+  <!-- Demo 特性卡片 -->
+  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; max-width: 900px; margin: 0 auto 48px auto;">
+    
+    <div style="flex: 1; min-width: 260px; max-width: 280px; background: rgba(255,255,255,0.03); border: 1px solid rgba(102,126,234,0.3); border-radius: 16px; padding: 24px; text-align: left;">
+      <div style="font-size: 28px; margin-bottom: 12px;">🛡️</div>
+      <h3 style="font-size: 16px; font-weight: 600; margin: 0 0 8px 0;">URL 防呆设计</h3>
+      <p style="font-size: 13px; color: rgba(255,255,255,0.6); margin: 0; line-height: 1.5;">自动处理 URL 格式问题，支持任意路径前缀自动提取 API 端点</p>
+    </div>
+    
+    <div style="flex: 1; min-width: 260px; max-width: 280px; background: rgba(255,255,255,0.03); border: 1px solid rgba(102,126,234,0.3); border-radius: 16px; padding: 24px; text-align: left;">
+      <div style="font-size: 28px; margin-bottom: 12px;">🔗</div>
+      <h3 style="font-size: 16px; font-weight: 600; margin: 0 0 8px 0;">SillyTavern 支持</h3>
+      <p style="font-size: 13px; color: rgba(255,255,255,0.6); margin: 0; line-height: 1.5;">完美支持 Google AI Studio 接口，可拉取和调用自定义 Gemini 模型</p>
+    </div>
+    
+    <div style="flex: 1; min-width: 260px; max-width: 280px; background: rgba(255,255,255,0.03); border: 1px solid rgba(102,126,234,0.3); border-radius: 16px; padding: 24px; text-align: left;">
+      <div style="font-size: 28px; margin-bottom: 12px;">✨</div>
+      <h3 style="font-size: 16px; font-weight: 600; margin: 0 0 8px 0;">Gemini 渠道优化</h3>
+      <p style="font-size: 13px; color: rgba(255,255,255,0.6); margin: 0; line-height: 1.5;">修复 OpenAI 接口调用失败问题，精准返回 Gemini 渠道模型</p>
+    </div>
+    
+  </div>
+
+  <!-- 功能特性 -->
+  <h2 style="font-size: 14px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 2px; margin: 0 0 24px 0;">核心特性</h2>
+  
+  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; max-width: 800px; margin: 0 auto 48px auto;">
+    <span style="background: rgba(102,126,234,0.15); color: #a5b4fc; padding: 8px 16px; border-radius: 20px; font-size: 13px;">⚡ 统一 OpenAI 格式</span>
+    <span style="background: rgba(118,75,162,0.15); color: #c4b5fd; padding: 8px 16px; border-radius: 20px; font-size: 13px;">🎨 多模态支持</span>
+    <span style="background: rgba(34,197,94,0.15); color: #86efac; padding: 8px 16px; border-radius: 20px; font-size: 13px;">💰 灵活计费</span>
+    <span style="background: rgba(251,146,60,0.15); color: #fdba74; padding: 8px 16px; border-radius: 20px; font-size: 13px;">🔄 智能路由</span>
+    <span style="background: rgba(240,147,251,0.15); color: #f0abfc; padding: 8px 16px; border-radius: 20px; font-size: 13px;">🤖 Realtime API</span>
+    <span style="background: rgba(34,211,238,0.15); color: #67e8f9; padding: 8px 16px; border-radius: 20px; font-size: 13px;">🔐 多端登录</span>
+  </div>
+
+  <!-- 统计数据 -->
+  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 32px; max-width: 700px; margin: 0 auto 48px auto;">
+    <div style="text-align: center; min-width: 100px;">
+      <div style="font-size: 36px; font-weight: 800; background: linear-gradient(135deg, #667eea, #f093fb); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">30+</div>
+      <div style="font-size: 13px; color: rgba(255,255,255,0.5);">模型供应商</div>
+    </div>
+    <div style="text-align: center; min-width: 100px;">
+      <div style="font-size: 36px; font-weight: 800; background: linear-gradient(135deg, #667eea, #f093fb); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">99.9%</div>
+      <div style="font-size: 13px; color: rgba(255,255,255,0.5);">服务可用性</div>
+    </div>
+    <div style="text-align: center; min-width: 100px;">
+      <div style="font-size: 36px; font-weight: 800; background: linear-gradient(135deg, #667eea, #f093fb); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">24/7</div>
+      <div style="font-size: 13px; color: rgba(255,255,255,0.5);">全天候服务</div>
+    </div>
+  </div>
+
+  <!-- 页脚 -->
+  <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 32px; margin-top: 32px;">
+    <p style="font-size: 13px; color: rgba(255,255,255,0.4); margin: 0;">
+      © 2025 DEMO的小站 · 基于 
+      <a href="https://github.com/Calcium-Ion/new-api" target="_blank" style="color: #667eea; text-decoration: none;">New API</a> 
+      构建 · 
+      <a href="https://github.com/pinkhtwo/new-api" target="_blank" style="color: #667eea; text-decoration: none;">Demo 版源码</a>
+    </p>
+  </div>
+
+</div>

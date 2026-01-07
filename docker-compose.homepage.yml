@@ -1,0 +1,17 @@
+# 静态网站 Docker Compose 配置
+# 使用方法：
+# 1. 将此文件和 index.html 上传到 VPS
+# 2. 运行: docker-compose -f docker-compose.homepage.yml up -d
+
+version: '3.8'
+
+services:
+  homepage:
+    image: nginx:alpine
+    container_name: homepage
+    restart: always
+    ports:
+      - "8080:80"  # 可改为其他端口，如 8888:80
+    volumes:
+      - ./index.html:/usr/share/nginx/html/index.html:ro
+    # 如果需要配置 HTTPS，可以挂载证书和 nginx 配置
