@@ -29,25 +29,23 @@
             --border-color: rgba(255, 255, 255, 0.08);
             --glow-color: rgba(102, 126, 234, 0.4);
             --icon-color: #ffffff;
-            --line-color: rgba(102, 126, 234, 0.3);
+            --canvas-opacity: 0.6;
+            --particle-opacity: 0.4;
         }
 
         /* 浅色主题 */
         body.light-theme {
-            --bg-primary: #f5f7fa;
+            --bg-primary: #f0f4f8;
             --bg-secondary: #ffffff;
-            --bg-card: rgba(255, 255, 255, 0.8);
+            --bg-card: rgba(255, 255, 255, 0.9);
             --text-primary: #1a1a2e;
             --text-secondary: rgba(26, 26, 46, 0.7);
             --text-muted: rgba(26, 26, 46, 0.5);
-            --accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            --accent-blue: #5a67d8;
-            --accent-purple: #6b46c1;
-            --accent-pink: #d53f8c;
-            --border-color: rgba(0, 0, 0, 0.06);
-            --glow-color: rgba(102, 126, 234, 0.15);
+            --border-color: rgba(0, 0, 0, 0.08);
+            --glow-color: rgba(102, 126, 234, 0.25);
             --icon-color: #1a1a2e;
-            --line-color: rgba(102, 126, 234, 0.2);
+            --canvas-opacity: 0.8;
+            --particle-opacity: 0.6;
         }
 
         body {
@@ -70,14 +68,14 @@
             overflow: hidden;
         }
 
-        /* 渐变光晕 */
+        /* 渐变光晕 - 深色模式 */
         .bg-gradient-1 {
             position: absolute;
             top: -20%;
             left: -10%;
             width: 50%;
             height: 60%;
-            background: radial-gradient(ellipse at center, var(--glow-color) 0%, transparent 60%);
+            background: radial-gradient(ellipse at center, rgba(102, 126, 234, 0.25) 0%, transparent 60%);
             animation: float1 20s ease-in-out infinite;
         }
 
@@ -101,34 +99,70 @@
             animation: float3 18s ease-in-out infinite;
         }
 
+        /* 浅色模式 - 增强渐变 */
         body.light-theme .bg-gradient-1 {
-            background: radial-gradient(ellipse at center, rgba(102, 126, 234, 0.12) 0%, transparent 60%);
+            background: radial-gradient(ellipse at center, rgba(102, 126, 234, 0.2) 0%, transparent 60%);
         }
 
         body.light-theme .bg-gradient-2 {
-            background: radial-gradient(ellipse at center, rgba(118, 75, 162, 0.1) 0%, transparent 55%);
+            background: radial-gradient(ellipse at center, rgba(118, 75, 162, 0.15) 0%, transparent 55%);
         }
 
         body.light-theme .bg-gradient-3 {
-            background: radial-gradient(ellipse at center, rgba(240, 147, 251, 0.08) 0%, transparent 50%);
+            background: radial-gradient(ellipse at center, rgba(240, 147, 251, 0.12) 0%, transparent 50%);
         }
 
-        /* 动态几何线条 Canvas */
+        /* 浅色模式额外装饰 */
+        .light-decor {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(102, 126, 234, 0.1) 0%, transparent 25%),
+                radial-gradient(circle at 80% 20%, rgba(240, 147, 251, 0.1) 0%, transparent 25%),
+                radial-gradient(circle at 40% 40%, rgba(118, 75, 162, 0.08) 0%, transparent 30%);
+        }
+
+        body.light-theme .light-decor {
+            display: block;
+        }
+
+        /* 动态网格 - 浅色模式更明显 */
+        .grid-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(102, 126, 234, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(102, 126, 234, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            opacity: 0.5;
+        }
+
+        body.light-theme .grid-pattern {
+            background-image: 
+                linear-gradient(rgba(102, 126, 234, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(102, 126, 234, 0.08) 1px, transparent 1px);
+            opacity: 0.8;
+        }
+
+        /* Canvas 动画 */
         #geometricCanvas {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            opacity: 0.6;
         }
 
-        body.light-theme #geometricCanvas {
-            opacity: 0.4;
-        }
-
-        /* 浮动粒子 */
-        .particles {
+        /* 浮动形状 - 浅色模式特有 */
+        .floating-shapes {
+            display: none;
             position: absolute;
             top: 0;
             left: 0;
@@ -137,31 +171,28 @@
             overflow: hidden;
         }
 
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: var(--accent-gradient);
-            border-radius: 50%;
-            opacity: 0.4;
-            animation: particleFloat 20s linear infinite;
+        body.light-theme .floating-shapes {
+            display: block;
         }
 
-        .particle:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 25s; }
-        .particle:nth-child(2) { left: 20%; animation-delay: 2s; animation-duration: 20s; }
-        .particle:nth-child(3) { left: 30%; animation-delay: 4s; animation-duration: 28s; }
-        .particle:nth-child(4) { left: 40%; animation-delay: 1s; animation-duration: 22s; }
-        .particle:nth-child(5) { left: 50%; animation-delay: 3s; animation-duration: 24s; }
-        .particle:nth-child(6) { left: 60%; animation-delay: 5s; animation-duration: 26s; }
-        .particle:nth-child(7) { left: 70%; animation-delay: 2s; animation-duration: 21s; }
-        .particle:nth-child(8) { left: 80%; animation-delay: 4s; animation-duration: 23s; }
-        .particle:nth-child(9) { left: 90%; animation-delay: 1s; animation-duration: 27s; }
+        .shape {
+            position: absolute;
+            border: 2px solid rgba(102, 126, 234, 0.15);
+            border-radius: 50%;
+            animation: shapeFloat 20s ease-in-out infinite;
+        }
 
-        @keyframes particleFloat {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.6; }
-            90% { opacity: 0.6; }
-            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        .shape:nth-child(1) { width: 300px; height: 300px; top: 10%; left: 5%; animation-delay: 0s; }
+        .shape:nth-child(2) { width: 200px; height: 200px; top: 60%; right: 10%; animation-delay: 5s; border-radius: 30%; }
+        .shape:nth-child(3) { width: 150px; height: 150px; bottom: 20%; left: 20%; animation-delay: 10s; }
+        .shape:nth-child(4) { width: 250px; height: 250px; top: 30%; right: 5%; animation-delay: 3s; border-radius: 40%; }
+        .shape:nth-child(5) { width: 180px; height: 180px; bottom: 30%; right: 25%; animation-delay: 7s; }
+
+        @keyframes shapeFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.3; }
+            25% { transform: translate(20px, -30px) rotate(90deg); opacity: 0.5; }
+            50% { transform: translate(-10px, 20px) rotate(180deg); opacity: 0.4; }
+            75% { transform: translate(30px, 10px) rotate(270deg); opacity: 0.5; }
         }
 
         @keyframes float1 {
@@ -181,17 +212,16 @@
             50% { transform: translate(40px, -30px); }
         }
 
-        /* ========== 浅色主题特殊样式 ========== */
+        /* ========== 浅色主题组件样式 ========== */
         body.light-theme .btn-secondary {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             border-color: rgba(0, 0, 0, 0.1);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
         }
 
         body.light-theme .btn-secondary:hover {
-            background: rgba(255, 255, 255, 1);
-            border-color: rgba(0, 0, 0, 0.15);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background: #ffffff;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
         }
 
         body.light-theme .feature-card,
@@ -199,20 +229,24 @@
         body.light-theme .provider-icon,
         body.light-theme .hero-badge,
         body.light-theme .api-endpoint {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             border-color: rgba(0, 0, 0, 0.06);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
         }
 
         body.light-theme .feature-card:hover,
         body.light-theme .provider-icon:hover {
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-            border-color: rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+            border-color: rgba(102, 126, 234, 0.2);
         }
 
         body.light-theme .demo-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(102, 126, 234, 0.08));
-            border-color: rgba(102, 126, 234, 0.2);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(102, 126, 234, 0.06));
+            border-color: rgba(102, 126, 234, 0.15);
+        }
+
+        body.light-theme .footer {
+            border-top-color: rgba(0, 0, 0, 0.06);
         }
 
         body.light-theme .copy-btn {
@@ -221,10 +255,6 @@
 
         body.light-theme .copy-btn:hover {
             background: rgba(0, 0, 0, 0.1);
-        }
-
-        body.light-theme .footer {
-            border-top-color: rgba(0, 0, 0, 0.06);
         }
 
         /* ========== 主容器 ========== */
@@ -444,39 +474,16 @@
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
         }
 
-        .provider-icon img {
-            width: 28px;
-            height: 28px;
-            object-fit: contain;
-        }
-
         .provider-icon.more {
             font-size: 14px;
             font-weight: 600;
             color: var(--text-secondary);
         }
 
-        /* 品牌图标颜色 */
-        .provider-icon svg {
-            width: 26px;
-            height: 26px;
+        .provider-icon img {
+            width: 28px;
+            height: 28px;
         }
-
-        .provider-icon.openai svg { color: currentColor; }
-        .provider-icon.claude svg { color: #cc785c; }
-        .provider-icon.gemini svg { color: #4285f4; }
-        .provider-icon.deepseek svg { color: #4d6bfe; }
-        .provider-icon.qwen svg { color: #6366f1; }
-        .provider-icon.glm svg { color: #3b82f6; }
-        .provider-icon.midjourney svg { color: currentColor; }
-        .provider-icon.azure svg { color: #0078d4; }
-        .provider-icon.grok svg { color: currentColor; }
-        .provider-icon.moonshot svg { color: #000; }
-
-        body.light-theme .provider-icon.moonshot svg { color: #000; }
-        body.light-theme .provider-icon.openai svg,
-        body.light-theme .provider-icon.midjourney svg,
-        body.light-theme .provider-icon.grok svg { color: #1a1a2e; }
 
         /* ========== 特性区域 ========== */
         .features-section {
@@ -533,26 +540,10 @@
             overflow: hidden;
         }
 
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
         .feature-card:hover {
             transform: translateY(-4px);
             border-color: rgba(255, 255, 255, 0.12);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .feature-card:hover::before {
-            opacity: 1;
         }
 
         .feature-icon {
@@ -617,16 +608,6 @@
             padding: 28px;
             position: relative;
             overflow: hidden;
-        }
-
-        .demo-card::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
         }
 
         .demo-card-content {
@@ -722,58 +703,22 @@
 
         /* ========== 响应式 ========== */
         @media (max-width: 768px) {
-            .hero {
-                padding: 40px 16px;
-            }
-
-            .api-endpoint {
-                padding: 12px 16px;
-            }
-
-            .api-endpoint .url {
-                font-size: 13px;
-            }
-
-            .btn {
-                padding: 14px 24px;
-                font-size: 15px;
-            }
-
-            .features-section {
-                padding: 80px 16px;
-            }
-
-            .feature-card {
-                padding: 24px;
-            }
-
-            .providers-grid {
-                gap: 12px;
-            }
-
-            .provider-icon {
-                width: 44px;
-                height: 44px;
-            }
+            .hero { padding: 40px 16px; }
+            .api-endpoint { padding: 12px 16px; }
+            .api-endpoint .url { font-size: 13px; }
+            .btn { padding: 14px 24px; font-size: 15px; }
+            .features-section { padding: 80px 16px; }
+            .feature-card { padding: 24px; }
+            .providers-grid { gap: 12px; }
+            .provider-icon { width: 44px; height: 44px; }
+            .provider-icon img { width: 24px; height: 24px; }
         }
 
         /* ========== 滚动条美化 ========== */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--bg-primary);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
 
         /* ========== 复制成功提示 ========== */
         .copy-toast {
@@ -805,18 +750,16 @@
         <div class="bg-gradient-1"></div>
         <div class="bg-gradient-2"></div>
         <div class="bg-gradient-3"></div>
-        <canvas id="geometricCanvas"></canvas>
-        <div class="particles">
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
+        <div class="light-decor"></div>
+        <div class="grid-pattern"></div>
+        <div class="floating-shapes">
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
         </div>
+        <canvas id="geometricCanvas"></canvas>
     </div>
 
     <!-- Hero 区域 -->
@@ -861,75 +804,53 @@
             </a>
         </div>
 
-        <!-- 供应商展示 -->
+        <!-- 供应商展示 - 使用官方品牌图标 -->
         <div class="providers-section">
             <p class="providers-title">支持众多大模型供应商</p>
             <div class="providers-grid">
                 <!-- OpenAI -->
-                <div class="provider-icon openai" title="OpenAI GPT">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364l2.0201-1.1638a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.4066-.6813zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6099-1.4997Z"/>
-                    </svg>
+                <div class="provider-icon" title="OpenAI">
+                    <img src="https://cdn.simpleicons.org/openai/ffffff" alt="OpenAI">
                 </div>
-                <!-- Claude -->
-                <div class="provider-icon claude" title="Anthropic Claude">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M4.709 15.955l4.72-2.478.79 2.478-4.718 2.478-.792-2.478zm8.213-7.636L9.29 6.363l3.632-1.956 3.632 1.956-3.632 1.956zm4.369 7.636l-.792 2.478-4.718-2.478.79-2.478 4.72 2.478zM12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z"/>
-                    </svg>
+                <!-- Anthropic Claude -->
+                <div class="provider-icon" title="Claude">
+                    <img src="https://cdn.simpleicons.org/anthropic/d4a27f" alt="Claude">
                 </div>
-                <!-- Gemini -->
-                <div class="provider-icon gemini" title="Google Gemini">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
-                    </svg>
+                <!-- Google Gemini -->
+                <div class="provider-icon" title="Google Gemini">
+                    <img src="https://cdn.simpleicons.org/googlegemini/4285f4" alt="Gemini">
                 </div>
                 <!-- DeepSeek -->
-                <div class="provider-icon deepseek" title="DeepSeek">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                    </svg>
+                <div class="provider-icon" title="DeepSeek">
+                    <img src="https://cdn.simpleicons.org/deepseek/4d6bfe" alt="DeepSeek">
                 </div>
-                <!-- Qwen -->
-                <div class="provider-icon qwen" title="通义千问">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                    </svg>
+                <!-- 通义千问 Qwen -->
+                <div class="provider-icon" title="通义千问">
+                    <img src="https://cdn.simpleicons.org/alibabacloud/ff6a00" alt="Qwen">
                 </div>
-                <!-- GLM -->
-                <div class="provider-icon glm" title="智谱 GLM">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-                    </svg>
+                <!-- 智谱 GLM -->
+                <div class="provider-icon" title="智谱 ChatGLM">
+                    <img src="https://cdn.simpleicons.org/zhihu/0084ff" alt="GLM">
                 </div>
-                <!-- Moonshot -->
-                <div class="provider-icon moonshot" title="Moonshot 月之暗面">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 01-4.4 2.26 5.403 5.403 0 01-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/>
-                    </svg>
+                <!-- xAI Grok -->
+                <div class="provider-icon" title="xAI Grok">
+                    <img src="https://cdn.simpleicons.org/x/ffffff" alt="Grok">
                 </div>
-                <!-- Grok -->
-                <div class="provider-icon grok" title="xAI Grok">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                    </svg>
+                <!-- Mistral -->
+                <div class="provider-icon" title="Mistral AI">
+                    <img src="https://cdn.simpleicons.org/mistral/ff7000" alt="Mistral">
+                </div>
+                <!-- Meta LLaMA -->
+                <div class="provider-icon" title="Meta LLaMA">
+                    <img src="https://cdn.simpleicons.org/meta/0668e1" alt="Meta">
                 </div>
                 <!-- Midjourney -->
-                <div class="provider-icon midjourney" title="Midjourney">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                    </svg>
+                <div class="provider-icon" title="Midjourney">
+                    <img src="https://cdn.simpleicons.org/midjourney/ffffff" alt="Midjourney">
                 </div>
                 <!-- Azure -->
-                <div class="provider-icon azure" title="Azure OpenAI">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12.71 2.29a1 1 0 00-1.42 0l-9 9a1 1 0 000 1.42l9 9a1 1 0 001.42 0l9-9a1 1 0 000-1.42l-9-9zM12 4.41L19.59 12 12 19.59 4.41 12 12 4.41z"/>
-                    </svg>
-                </div>
-                <!-- Suno -->
-                <div class="provider-icon" title="Suno AI">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-                    </svg>
+                <div class="provider-icon" title="Azure OpenAI">
+                    <img src="https://cdn.simpleicons.org/microsoftazure/0078d4" alt="Azure">
                 </div>
                 <!-- More -->
                 <div class="provider-icon more" title="更多供应商">30+</div>
@@ -1066,7 +987,6 @@
         const canvas = document.getElementById('geometricCanvas');
         const ctx = canvas.getContext('2d');
         let width, height;
-        let lines = [];
         let nodes = [];
 
         function resize() {
@@ -1077,14 +997,14 @@
 
         function initNodes() {
             nodes = [];
-            const nodeCount = Math.floor((width * height) / 25000);
+            const nodeCount = Math.floor((width * height) / 20000);
             for (let i = 0; i < nodeCount; i++) {
                 nodes.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
-                    vx: (Math.random() - 0.5) * 0.5,
-                    vy: (Math.random() - 0.5) * 0.5,
-                    radius: Math.random() * 2 + 1
+                    vx: (Math.random() - 0.5) * 0.6,
+                    vy: (Math.random() - 0.5) * 0.6,
+                    radius: Math.random() * 2.5 + 1
                 });
             }
         }
@@ -1093,8 +1013,10 @@
             ctx.clearRect(0, 0, width, height);
             
             const isLight = document.body.classList.contains('light-theme');
-            const lineColor = isLight ? 'rgba(102, 126, 234, 0.15)' : 'rgba(102, 126, 234, 0.25)';
-            const nodeColor = isLight ? 'rgba(102, 126, 234, 0.3)' : 'rgba(102, 126, 234, 0.5)';
+            // 浅色模式使用更深的颜色以增强可见性
+            const lineColor = isLight ? 'rgba(102, 126, 234, 0.25)' : 'rgba(102, 126, 234, 0.2)';
+            const nodeColor = isLight ? 'rgba(102, 126, 234, 0.5)' : 'rgba(102, 126, 234, 0.4)';
+            const maxDist = isLight ? 180 : 150;
 
             // 更新节点位置
             nodes.forEach(node => {
@@ -1106,8 +1028,7 @@
             });
 
             // 绘制连线
-            ctx.strokeStyle = lineColor;
-            ctx.lineWidth = 1;
+            ctx.lineWidth = isLight ? 1.5 : 1;
             
             for (let i = 0; i < nodes.length; i++) {
                 for (let j = i + 1; j < nodes.length; j++) {
@@ -1115,8 +1036,11 @@
                     const dy = nodes[i].y - nodes[j].y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
                     
-                    if (dist < 150) {
-                        ctx.globalAlpha = 1 - (dist / 150);
+                    if (dist < maxDist) {
+                        const opacity = 1 - (dist / maxDist);
+                        ctx.strokeStyle = isLight 
+                            ? `rgba(102, 126, 234, ${opacity * 0.35})` 
+                            : `rgba(102, 126, 234, ${opacity * 0.25})`;
                         ctx.beginPath();
                         ctx.moveTo(nodes[i].x, nodes[i].y);
                         ctx.lineTo(nodes[j].x, nodes[j].y);
@@ -1126,11 +1050,10 @@
             }
 
             // 绘制节点
-            ctx.globalAlpha = 1;
             ctx.fillStyle = nodeColor;
             nodes.forEach(node => {
                 ctx.beginPath();
-                ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+                ctx.arc(node.x, node.y, isLight ? node.radius * 1.3 : node.radius, 0, Math.PI * 2);
                 ctx.fill();
             });
 
@@ -1147,19 +1070,39 @@
                 const theme = event.data.themeMode;
                 if (theme === 'light') {
                     document.body.classList.add('light-theme');
+                    updateIconColors(true);
                 } else {
                     document.body.classList.remove('light-theme');
+                    updateIconColors(false);
                 }
             }
         });
+
+        // 根据主题更新图标颜色
+        function updateIconColors(isLight) {
+            const icons = document.querySelectorAll('.provider-icon img');
+            icons.forEach(img => {
+                const src = img.src;
+                if (src.includes('openai') || src.includes('midjourney') || src.includes('/x/')) {
+                    // 这些图标在浅色模式需要改为深色
+                    if (isLight) {
+                        img.src = src.replace('/ffffff', '/1a1a2e');
+                    } else {
+                        img.src = src.replace('/1a1a2e', '/ffffff');
+                    }
+                }
+            });
+        }
 
         // 系统主题检测
         if (window.matchMedia) {
             window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', e => {
                 if (e.matches) {
                     document.body.classList.add('light-theme');
+                    updateIconColors(true);
                 } else {
                     document.body.classList.remove('light-theme');
+                    updateIconColors(false);
                 }
             });
         }
