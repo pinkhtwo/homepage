@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DEMO的小站 - 统一的大模型接口网关</title>
+    <title>DEMO的小站 - 良心大模型接口服务</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -29,13 +29,14 @@
             --border-color: rgba(255, 255, 255, 0.08);
             --glow-color: rgba(102, 126, 234, 0.4);
             --icon-color: #ffffff;
+            --line-color: rgba(102, 126, 234, 0.3);
         }
 
         /* 浅色主题 */
         body.light-theme {
-            --bg-primary: #f8f9fc;
+            --bg-primary: #f5f7fa;
             --bg-secondary: #ffffff;
-            --bg-card: rgba(0, 0, 0, 0.02);
+            --bg-card: rgba(255, 255, 255, 0.8);
             --text-primary: #1a1a2e;
             --text-secondary: rgba(26, 26, 46, 0.7);
             --text-muted: rgba(26, 26, 46, 0.5);
@@ -43,84 +44,10 @@
             --accent-blue: #5a67d8;
             --accent-purple: #6b46c1;
             --accent-pink: #d53f8c;
-            --border-color: rgba(0, 0, 0, 0.08);
-            --glow-color: rgba(102, 126, 234, 0.2);
+            --border-color: rgba(0, 0, 0, 0.06);
+            --glow-color: rgba(102, 126, 234, 0.15);
             --icon-color: #1a1a2e;
-        }
-
-        /* 浅色主题下的背景渐变调整 */
-        body.light-theme .bg-gradient-1 {
-            background: radial-gradient(ellipse at center, rgba(102, 126, 234, 0.08) 0%, transparent 60%);
-        }
-
-        body.light-theme .bg-gradient-2 {
-            background: radial-gradient(ellipse at center, rgba(118, 75, 162, 0.06) 0%, transparent 55%);
-        }
-
-        body.light-theme .bg-gradient-3 {
-            background: radial-gradient(ellipse at center, rgba(240, 147, 251, 0.05) 0%, transparent 50%);
-        }
-
-        body.light-theme .grid-overlay {
-            background-image:
-                linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
-        }
-
-        /* 浅色主题下的按钮调整 */
-        body.light-theme .btn-secondary {
-            background: rgba(0, 0, 0, 0.03);
-            border-color: rgba(0, 0, 0, 0.1);
-        }
-
-        body.light-theme .btn-secondary:hover {
-            background: rgba(0, 0, 0, 0.06);
-            border-color: rgba(0, 0, 0, 0.15);
-        }
-
-        /* 浅色主题下的卡片调整 */
-        body.light-theme .feature-card,
-        body.light-theme .demo-card,
-        body.light-theme .provider-icon,
-        body.light-theme .hero-badge,
-        body.light-theme .api-endpoint {
-            background: rgba(255, 255, 255, 0.8);
-            border-color: rgba(0, 0, 0, 0.08);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-        }
-
-        body.light-theme .feature-card:hover,
-        body.light-theme .provider-icon:hover {
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-            border-color: rgba(0, 0, 0, 0.12);
-        }
-
-        body.light-theme .demo-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(102, 126, 234, 0.05));
-            border-color: rgba(102, 126, 234, 0.15);
-        }
-
-        /* 浅色主题下的复制按钮 */
-        body.light-theme .copy-btn {
-            background: rgba(0, 0, 0, 0.05);
-        }
-
-        body.light-theme .copy-btn:hover {
-            background: rgba(0, 0, 0, 0.1);
-        }
-
-        body.light-theme .copy-btn svg {
-            stroke: var(--text-secondary);
-        }
-
-        /* 浅色主题下的页脚 */
-        body.light-theme .footer {
-            border-top-color: rgba(0, 0, 0, 0.08);
-        }
-
-        /* 浅色主题下的图标颜色 */
-        body.light-theme .provider-icon svg {
-            color: var(--icon-color);
+            --line-color: rgba(102, 126, 234, 0.2);
         }
 
         body {
@@ -132,7 +59,7 @@
             line-height: 1.6;
         }
 
-        /* 动态背景 */
+        /* ========== 动态背景 ========== */
         .bg-wrapper {
             position: fixed;
             top: 0;
@@ -143,59 +70,110 @@
             overflow: hidden;
         }
 
+        /* 渐变光晕 */
         .bg-gradient-1 {
             position: absolute;
-            top: -50%;
-            left: -20%;
-            width: 80%;
-            height: 100%;
-            background: radial-gradient(ellipse at center, rgba(102, 126, 234, 0.15) 0%, transparent 60%);
+            top: -20%;
+            left: -10%;
+            width: 50%;
+            height: 60%;
+            background: radial-gradient(ellipse at center, var(--glow-color) 0%, transparent 60%);
             animation: float1 20s ease-in-out infinite;
         }
 
         .bg-gradient-2 {
             position: absolute;
-            top: 20%;
-            right: -30%;
-            width: 70%;
-            height: 80%;
-            background: radial-gradient(ellipse at center, rgba(118, 75, 162, 0.12) 0%, transparent 55%);
+            top: 40%;
+            right: -15%;
+            width: 45%;
+            height: 50%;
+            background: radial-gradient(ellipse at center, rgba(118, 75, 162, 0.2) 0%, transparent 55%);
             animation: float2 25s ease-in-out infinite;
         }
 
         .bg-gradient-3 {
             position: absolute;
-            bottom: -20%;
-            left: 30%;
-            width: 60%;
-            height: 70%;
-            background: radial-gradient(ellipse at center, rgba(240, 147, 251, 0.08) 0%, transparent 50%);
+            bottom: -10%;
+            left: 35%;
+            width: 40%;
+            height: 45%;
+            background: radial-gradient(ellipse at center, rgba(240, 147, 251, 0.15) 0%, transparent 50%);
             animation: float3 18s ease-in-out infinite;
         }
 
-        .grid-overlay {
+        body.light-theme .bg-gradient-1 {
+            background: radial-gradient(ellipse at center, rgba(102, 126, 234, 0.12) 0%, transparent 60%);
+        }
+
+        body.light-theme .bg-gradient-2 {
+            background: radial-gradient(ellipse at center, rgba(118, 75, 162, 0.1) 0%, transparent 55%);
+        }
+
+        body.light-theme .bg-gradient-3 {
+            background: radial-gradient(ellipse at center, rgba(240, 147, 251, 0.08) 0%, transparent 50%);
+        }
+
+        /* 动态几何线条 Canvas */
+        #geometricCanvas {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-            background-size: 60px 60px;
-            mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+            opacity: 0.6;
+        }
+
+        body.light-theme #geometricCanvas {
+            opacity: 0.4;
+        }
+
+        /* 浮动粒子 */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--accent-gradient);
+            border-radius: 50%;
+            opacity: 0.4;
+            animation: particleFloat 20s linear infinite;
+        }
+
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 25s; }
+        .particle:nth-child(2) { left: 20%; animation-delay: 2s; animation-duration: 20s; }
+        .particle:nth-child(3) { left: 30%; animation-delay: 4s; animation-duration: 28s; }
+        .particle:nth-child(4) { left: 40%; animation-delay: 1s; animation-duration: 22s; }
+        .particle:nth-child(5) { left: 50%; animation-delay: 3s; animation-duration: 24s; }
+        .particle:nth-child(6) { left: 60%; animation-delay: 5s; animation-duration: 26s; }
+        .particle:nth-child(7) { left: 70%; animation-delay: 2s; animation-duration: 21s; }
+        .particle:nth-child(8) { left: 80%; animation-delay: 4s; animation-duration: 23s; }
+        .particle:nth-child(9) { left: 90%; animation-delay: 1s; animation-duration: 27s; }
+
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
         }
 
         @keyframes float1 {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            33% { transform: translate(30px, -30px) rotate(5deg); }
-            66% { transform: translate(-20px, 20px) rotate(-3deg); }
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.05); }
+            66% { transform: translate(-20px, 20px) scale(0.95); }
         }
 
         @keyframes float2 {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            33% { transform: translate(-40px, 20px) rotate(-5deg); }
-            66% { transform: translate(30px, -40px) rotate(3deg); }
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-40px, 20px) scale(1.1); }
+            66% { transform: translate(30px, -40px) scale(0.9); }
         }
 
         @keyframes float3 {
@@ -203,14 +181,60 @@
             50% { transform: translate(40px, -30px); }
         }
 
-        /* 主容器 */
+        /* ========== 浅色主题特殊样式 ========== */
+        body.light-theme .btn-secondary {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        body.light-theme .btn-secondary:hover {
+            background: rgba(255, 255, 255, 1);
+            border-color: rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .feature-card,
+        body.light-theme .demo-card,
+        body.light-theme .provider-icon,
+        body.light-theme .hero-badge,
+        body.light-theme .api-endpoint {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(0, 0, 0, 0.06);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+        }
+
+        body.light-theme .feature-card:hover,
+        body.light-theme .provider-icon:hover {
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .demo-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(102, 126, 234, 0.08));
+            border-color: rgba(102, 126, 234, 0.2);
+        }
+
+        body.light-theme .copy-btn {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        body.light-theme .copy-btn:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .footer {
+            border-top-color: rgba(0, 0, 0, 0.06);
+        }
+
+        /* ========== 主容器 ========== */
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 24px;
         }
 
-        /* Hero 区域 */
+        /* ========== Hero 区域 ========== */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -237,17 +261,18 @@
             animation: fadeInUp 0.8s ease-out;
         }
 
-        .hero-badge .dot {
+        .hero-badge .status-dot {
             width: 8px;
             height: 8px;
             background: #22c55e;
             border-radius: 50%;
             animation: pulse 2s ease-in-out infinite;
+            box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(1.2); }
+            0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 8px rgba(34, 197, 94, 0.6); }
+            50% { opacity: 0.8; transform: scale(1.2); box-shadow: 0 0 16px rgba(34, 197, 94, 0.8); }
         }
 
         .hero-title {
@@ -274,17 +299,11 @@
         }
 
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* API 端点展示 */
+        /* ========== API 端点展示 ========== */
         .api-endpoint {
             display: flex;
             align-items: center;
@@ -333,7 +352,7 @@
             stroke: var(--text-secondary);
         }
 
-        /* CTA 按钮 */
+        /* ========== CTA 按钮 ========== */
         .cta-buttons {
             display: flex;
             gap: 16px;
@@ -384,7 +403,7 @@
             height: 20px;
         }
 
-        /* 供应商展示 */
+        /* ========== 供应商展示 ========== */
         .providers-section {
             margin-top: 80px;
             animation: fadeInUp 0.8s ease-out 0.5s backwards;
@@ -402,13 +421,13 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 24px;
-            max-width: 800px;
+            gap: 16px;
+            max-width: 900px;
         }
 
         .provider-icon {
-            width: 48px;
-            height: 48px;
+            width: 52px;
+            height: 52px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -422,7 +441,7 @@
         .provider-icon:hover {
             transform: translateY(-4px);
             border-color: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
         }
 
         .provider-icon img {
@@ -437,7 +456,29 @@
             color: var(--text-secondary);
         }
 
-        /* 特性区域 */
+        /* 品牌图标颜色 */
+        .provider-icon svg {
+            width: 26px;
+            height: 26px;
+        }
+
+        .provider-icon.openai svg { color: currentColor; }
+        .provider-icon.claude svg { color: #cc785c; }
+        .provider-icon.gemini svg { color: #4285f4; }
+        .provider-icon.deepseek svg { color: #4d6bfe; }
+        .provider-icon.qwen svg { color: #6366f1; }
+        .provider-icon.glm svg { color: #3b82f6; }
+        .provider-icon.midjourney svg { color: currentColor; }
+        .provider-icon.azure svg { color: #0078d4; }
+        .provider-icon.grok svg { color: currentColor; }
+        .provider-icon.moonshot svg { color: #000; }
+
+        body.light-theme .provider-icon.moonshot svg { color: #000; }
+        body.light-theme .provider-icon.openai svg,
+        body.light-theme .provider-icon.midjourney svg,
+        body.light-theme .provider-icon.grok svg { color: #1a1a2e; }
+
+        /* ========== 特性区域 ========== */
         .features-section {
             padding: 120px 24px;
         }
@@ -507,7 +548,7 @@
         .feature-card:hover {
             transform: translateY(-4px);
             border-color: rgba(255, 255, 255, 0.12);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
         }
 
         .feature-card:hover::before {
@@ -555,7 +596,7 @@
             margin-top: 16px;
         }
 
-        /* Demo 特性高亮 */
+        /* ========== Demo 特性高亮 ========== */
         .demo-features {
             padding: 80px 24px;
             background: linear-gradient(180deg, transparent, rgba(102, 126, 234, 0.03), transparent);
@@ -610,7 +651,7 @@
             line-height: 1.6;
         }
 
-        /* 统计数据 */
+        /* ========== 统计数据 ========== */
         .stats-section {
             padding: 80px 24px;
         }
@@ -643,7 +684,7 @@
             font-size: 15px;
         }
 
-        /* 页脚 */
+        /* ========== 页脚 ========== */
         .footer {
             padding: 48px 24px;
             text-align: center;
@@ -679,7 +720,7 @@
             text-decoration: none;
         }
 
-        /* 响应式 */
+        /* ========== 响应式 ========== */
         @media (max-width: 768px) {
             .hero {
                 padding: 40px 16px;
@@ -707,16 +748,16 @@
             }
 
             .providers-grid {
-                gap: 16px;
+                gap: 12px;
             }
 
             .provider-icon {
-                width: 42px;
-                height: 42px;
+                width: 44px;
+                height: 44px;
             }
         }
 
-        /* 滚动条美化 */
+        /* ========== 滚动条美化 ========== */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -734,7 +775,7 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
-        /* 复制成功提示 */
+        /* ========== 复制成功提示 ========== */
         .copy-toast {
             position: fixed;
             bottom: 32px;
@@ -764,19 +805,30 @@
         <div class="bg-gradient-1"></div>
         <div class="bg-gradient-2"></div>
         <div class="bg-gradient-3"></div>
-        <div class="grid-overlay"></div>
+        <canvas id="geometricCanvas"></canvas>
+        <div class="particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
     </div>
 
     <!-- Hero 区域 -->
     <section class="hero">
         <div class="hero-badge">
-            <span class="dot"></span>
-            <span>Demo 优化版 · 持续更新中</span>
+            <span class="status-dot"></span>
+            <span>服务运行正常 · 全部节点在线</span>
         </div>
         
         <h1 class="hero-title">
-            <span class="gradient-text">统一的</span><br>
-            大模型接口网关
+            <span class="gradient-text">DEMO的</span><br>
+            良心小站
         </h1>
         
         <p class="hero-subtitle">
@@ -813,52 +865,73 @@
         <div class="providers-section">
             <p class="providers-title">支持众多大模型供应商</p>
             <div class="providers-grid">
-                <div class="provider-icon" title="OpenAI">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                        <path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364l2.0201-1.1638a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.4066-.6813zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6099-1.4997Z" fill="currentColor"/>
+                <!-- OpenAI -->
+                <div class="provider-icon openai" title="OpenAI GPT">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364l2.0201-1.1638a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.4066-.6813zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6099-1.4997Z"/>
                     </svg>
                 </div>
-                <div class="provider-icon" title="Claude">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                        <path d="M17.3041 3.5H6.69592C4.93254 3.5 3.5 4.93254 3.5 6.69592V17.3041C3.5 19.0675 4.93254 20.5 6.69592 20.5H17.3041C19.0675 20.5 20.5 19.0675 20.5 17.3041V6.69592C20.5 4.93254 19.0675 3.5 17.3041 3.5Z" stroke="currentColor" stroke-width="1.5"/>
-                        <path d="M15.5 12L10.5 8V16L15.5 12Z" fill="currentColor"/>
+                <!-- Claude -->
+                <div class="provider-icon claude" title="Anthropic Claude">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M4.709 15.955l4.72-2.478.79 2.478-4.718 2.478-.792-2.478zm8.213-7.636L9.29 6.363l3.632-1.956 3.632 1.956-3.632 1.956zm4.369 7.636l-.792 2.478-4.718-2.478.79-2.478 4.72 2.478zM12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z"/>
                     </svg>
                 </div>
-                <div class="provider-icon" title="Google Gemini">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 2L13.09 8.26L19 6L14.74 10.91L21 12L14.74 13.09L19 18L13.09 15.74L12 22L10.91 15.74L5 18L9.26 13.09L3 12L9.26 10.91L5 6L10.91 8.26L12 2Z" fill="currentColor"/>
+                <!-- Gemini -->
+                <div class="provider-icon gemini" title="Google Gemini">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
                     </svg>
                 </div>
-                <div class="provider-icon" title="DeepSeek">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/>
-                        <path d="M12 7V12L15 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <!-- DeepSeek -->
+                <div class="provider-icon deepseek" title="DeepSeek">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                     </svg>
                 </div>
-                <div class="provider-icon" title="智谱 GLM">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                        <rect x="4" y="4" width="16" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/>
-                        <path d="M8 12H16M12 8V16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <!-- Qwen -->
+                <div class="provider-icon qwen" title="通义千问">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
                     </svg>
                 </div>
-                <div class="provider-icon" title="通义千问">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 3C7.03 3 3 7.03 3 12C3 16.97 7.03 21 12 21C16.97 21 21 16.97 21 12C21 7.03 16.97 3 12 3Z" stroke="currentColor" stroke-width="1.5"/>
-                        <path d="M12 8V16M8 12H16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <!-- GLM -->
+                <div class="provider-icon glm" title="智谱 GLM">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
                     </svg>
                 </div>
-                <div class="provider-icon" title="Midjourney">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                        <path d="M4 16L8.586 11.414C9.367 10.633 10.633 10.633 11.414 11.414L16 16M14 14L15.586 12.414C16.367 11.633 17.633 11.633 18.414 12.414L20 14M14 8H14.01M6 20H18C19.105 20 20 19.105 20 18V6C20 4.895 19.105 4 18 4H6C4.895 4 4 4.895 4 6V18C4 19.105 4.895 20 6 20Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- Moonshot -->
+                <div class="provider-icon moonshot" title="Moonshot 月之暗面">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 01-4.4 2.26 5.403 5.403 0 01-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/>
                     </svg>
                 </div>
-                <div class="provider-icon" title="Azure OpenAI">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                        <path d="M5.5 9.5L12 3L18.5 9.5L12 16L5.5 9.5Z" stroke="currentColor" stroke-width="1.5"/>
-                        <path d="M12 16V21" stroke="currentColor" stroke-width="1.5"/>
-                        <path d="M8 19H16" stroke="currentColor" stroke-width="1.5"/>
+                <!-- Grok -->
+                <div class="provider-icon grok" title="xAI Grok">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                     </svg>
                 </div>
+                <!-- Midjourney -->
+                <div class="provider-icon midjourney" title="Midjourney">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                </div>
+                <!-- Azure -->
+                <div class="provider-icon azure" title="Azure OpenAI">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12.71 2.29a1 1 0 00-1.42 0l-9 9a1 1 0 000 1.42l9 9a1 1 0 001.42 0l9-9a1 1 0 000-1.42l-9-9zM12 4.41L19.59 12 12 19.59 4.41 12 12 4.41z"/>
+                    </svg>
+                </div>
+                <!-- Suno -->
+                <div class="provider-icon" title="Suno AI">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                    </svg>
+                </div>
+                <!-- More -->
                 <div class="provider-icon more" title="更多供应商">30+</div>
             </div>
         </div>
@@ -868,9 +941,9 @@
     <section class="demo-features">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">Demo 版独家优化</span>
-                <h2 class="section-title">专属增强特性</h2>
-                <p class="section-subtitle">基于官方版本，我们加入了更多实用优化</p>
+                <span class="section-tag">专属优化</span>
+                <h2 class="section-title">独家增强特性</h2>
+                <p class="section-subtitle">基于官方版本，加入更多实用功能优化</p>
             </div>
 
             <div class="demo-grid">
@@ -989,9 +1062,87 @@
     <div class="copy-toast" id="copyToast">✓ API 地址已复制到剪贴板</div>
 
     <script>
-        // 监听来自 new-api 的主题消息
+        // ========== 动态几何线条背景 ==========
+        const canvas = document.getElementById('geometricCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let lines = [];
+        let nodes = [];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            initNodes();
+        }
+
+        function initNodes() {
+            nodes = [];
+            const nodeCount = Math.floor((width * height) / 25000);
+            for (let i = 0; i < nodeCount; i++) {
+                nodes.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    radius: Math.random() * 2 + 1
+                });
+            }
+        }
+
+        function drawGeometric() {
+            ctx.clearRect(0, 0, width, height);
+            
+            const isLight = document.body.classList.contains('light-theme');
+            const lineColor = isLight ? 'rgba(102, 126, 234, 0.15)' : 'rgba(102, 126, 234, 0.25)';
+            const nodeColor = isLight ? 'rgba(102, 126, 234, 0.3)' : 'rgba(102, 126, 234, 0.5)';
+
+            // 更新节点位置
+            nodes.forEach(node => {
+                node.x += node.vx;
+                node.y += node.vy;
+
+                if (node.x < 0 || node.x > width) node.vx *= -1;
+                if (node.y < 0 || node.y > height) node.vy *= -1;
+            });
+
+            // 绘制连线
+            ctx.strokeStyle = lineColor;
+            ctx.lineWidth = 1;
+            
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    const dx = nodes[i].x - nodes[j].x;
+                    const dy = nodes[i].y - nodes[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (dist < 150) {
+                        ctx.globalAlpha = 1 - (dist / 150);
+                        ctx.beginPath();
+                        ctx.moveTo(nodes[i].x, nodes[i].y);
+                        ctx.lineTo(nodes[j].x, nodes[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            // 绘制节点
+            ctx.globalAlpha = 1;
+            ctx.fillStyle = nodeColor;
+            nodes.forEach(node => {
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            requestAnimationFrame(drawGeometric);
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+        drawGeometric();
+
+        // ========== 主题切换监听 ==========
         window.addEventListener('message', function(event) {
-            // 处理主题模式消息
             if (event.data && event.data.themeMode) {
                 const theme = event.data.themeMode;
                 if (theme === 'light') {
@@ -1002,14 +1153,7 @@
             }
         });
 
-        // 检测系统主题偏好（作为后备方案）
-        function detectSystemTheme() {
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-                document.body.classList.add('light-theme');
-            }
-        }
-
-        // 监听系统主题变化
+        // 系统主题检测
         if (window.matchMedia) {
             window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', e => {
                 if (e.matches) {
@@ -1020,37 +1164,29 @@
             });
         }
 
+        // ========== 复制功能 ==========
         function copyApiUrl() {
             const apiUrl = 'https://api.demokt.me';
             navigator.clipboard.writeText(apiUrl).then(() => {
-                const toast = document.getElementById('copyToast');
-                toast.classList.add('show');
-                setTimeout(() => {
-                    toast.classList.remove('show');
-                }, 2000);
+                showToast();
             }).catch(err => {
-                // 降级方案
                 const textArea = document.createElement('textarea');
                 textArea.value = apiUrl;
                 document.body.appendChild(textArea);
                 textArea.select();
                 document.execCommand('copy');
                 document.body.removeChild(textArea);
-                
-                const toast = document.getElementById('copyToast');
-                toast.classList.add('show');
-                setTimeout(() => {
-                    toast.classList.remove('show');
-                }, 2000);
+                showToast();
             });
         }
 
-        // 滚动动画
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+        function showToast() {
+            const toast = document.getElementById('copyToast');
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
 
+        // ========== 滚动动画 ==========
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -1058,7 +1194,7 @@
                     entry.target.style.transform = 'translateY(0)';
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
         document.querySelectorAll('.feature-card, .demo-card, .stat-item').forEach(el => {
             el.style.opacity = '0';
