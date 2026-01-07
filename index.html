@@ -14,6 +14,7 @@
             box-sizing: border-box;
         }
 
+        /* 深色主题（默认） */
         :root {
             --bg-primary: #0a0a0f;
             --bg-secondary: #12121a;
@@ -27,6 +28,99 @@
             --accent-pink: #f093fb;
             --border-color: rgba(255, 255, 255, 0.08);
             --glow-color: rgba(102, 126, 234, 0.4);
+            --icon-color: #ffffff;
+        }
+
+        /* 浅色主题 */
+        body.light-theme {
+            --bg-primary: #f8f9fc;
+            --bg-secondary: #ffffff;
+            --bg-card: rgba(0, 0, 0, 0.02);
+            --text-primary: #1a1a2e;
+            --text-secondary: rgba(26, 26, 46, 0.7);
+            --text-muted: rgba(26, 26, 46, 0.5);
+            --accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            --accent-blue: #5a67d8;
+            --accent-purple: #6b46c1;
+            --accent-pink: #d53f8c;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --glow-color: rgba(102, 126, 234, 0.2);
+            --icon-color: #1a1a2e;
+        }
+
+        /* 浅色主题下的背景渐变调整 */
+        body.light-theme .bg-gradient-1 {
+            background: radial-gradient(ellipse at center, rgba(102, 126, 234, 0.08) 0%, transparent 60%);
+        }
+
+        body.light-theme .bg-gradient-2 {
+            background: radial-gradient(ellipse at center, rgba(118, 75, 162, 0.06) 0%, transparent 55%);
+        }
+
+        body.light-theme .bg-gradient-3 {
+            background: radial-gradient(ellipse at center, rgba(240, 147, 251, 0.05) 0%, transparent 50%);
+        }
+
+        body.light-theme .grid-overlay {
+            background-image:
+                linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+        }
+
+        /* 浅色主题下的按钮调整 */
+        body.light-theme .btn-secondary {
+            background: rgba(0, 0, 0, 0.03);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .btn-secondary:hover {
+            background: rgba(0, 0, 0, 0.06);
+            border-color: rgba(0, 0, 0, 0.15);
+        }
+
+        /* 浅色主题下的卡片调整 */
+        body.light-theme .feature-card,
+        body.light-theme .demo-card,
+        body.light-theme .provider-icon,
+        body.light-theme .hero-badge,
+        body.light-theme .api-endpoint {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        body.light-theme .feature-card:hover,
+        body.light-theme .provider-icon:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            border-color: rgba(0, 0, 0, 0.12);
+        }
+
+        body.light-theme .demo-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(102, 126, 234, 0.05));
+            border-color: rgba(102, 126, 234, 0.15);
+        }
+
+        /* 浅色主题下的复制按钮 */
+        body.light-theme .copy-btn {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        body.light-theme .copy-btn:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .copy-btn svg {
+            stroke: var(--text-secondary);
+        }
+
+        /* 浅色主题下的页脚 */
+        body.light-theme .footer {
+            border-top-color: rgba(0, 0, 0, 0.08);
+        }
+
+        /* 浅色主题下的图标颜色 */
+        body.light-theme .provider-icon svg {
+            color: var(--icon-color);
         }
 
         body {
@@ -895,6 +989,37 @@
     <div class="copy-toast" id="copyToast">✓ API 地址已复制到剪贴板</div>
 
     <script>
+        // 监听来自 new-api 的主题消息
+        window.addEventListener('message', function(event) {
+            // 处理主题模式消息
+            if (event.data && event.data.themeMode) {
+                const theme = event.data.themeMode;
+                if (theme === 'light') {
+                    document.body.classList.add('light-theme');
+                } else {
+                    document.body.classList.remove('light-theme');
+                }
+            }
+        });
+
+        // 检测系统主题偏好（作为后备方案）
+        function detectSystemTheme() {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+                document.body.classList.add('light-theme');
+            }
+        }
+
+        // 监听系统主题变化
+        if (window.matchMedia) {
+            window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', e => {
+                if (e.matches) {
+                    document.body.classList.add('light-theme');
+                } else {
+                    document.body.classList.remove('light-theme');
+                }
+            });
+        }
+
         function copyApiUrl() {
             const apiUrl = 'https://api.demokt.me';
             navigator.clipboard.writeText(apiUrl).then(() => {
