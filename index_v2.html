@@ -343,24 +343,9 @@
             z-index: -1;
         }
 
-        /* 网格背景 */
-        .bg-grid {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: -2;
-            background-size: 40px 40px;
-            background-image: linear-gradient(to right, var(--border-color) 1px, transparent 1px),
-                              linear-gradient(to bottom, var(--border-color) 1px, transparent 1px);
-            mask-image: radial-gradient(circle at 50% 50%, black, transparent 80%);
-            -webkit-mask-image: radial-gradient(circle at 50% 50%, black, transparent 80%);
-            opacity: 0.2;
-            pointer-events: none;
-        }
     </style>
 </head>
 <body>
-    <div class="bg-grid"></div>
     <canvas id="bg-canvas"></canvas>
 
     <section class="hero">
@@ -532,130 +517,120 @@
             }
         });
 
-        // 恢复并优化背景动画：星座连线 + 极光效果
+        // 艺术流光线条背景动画
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let width, height;
-        let particles = [];
-        const particleCount = 80;
-        const connectionDistance = 160;
+        let lines = [];
+        let t = 0;
 
         function resize() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
+            initLines();
         }
         window.addEventListener('resize', resize);
-        resize();
 
-        class Particle {
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.size = Math.random() * 2 + 1.5;
-            }
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-
-                if (this.x < 0) this.x = width;
-                if (this.x > width) this.x = 0;
-                if (this.y < 0) this.y = height;
-                if (this.y > height) this.y = 0;
-            }
-            draw() {
-                const isLight = document.body.classList.contains('light-theme');
-                ctx.fillStyle = isLight ? 'rgba(0,0,0,0.3)' : 'rgba(255,255,255,0.4)';
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        function initParticles() {
-            particles = [];
-            for(let i=0; i<particleCount; i++) particles.push(new Particle());
-        }
-        initParticles();
-
-        function drawConnections() {
-            const isLight = document.body.classList.contains('light-theme');
-            const baseColor = isLight ? '0,0,0' : '255,255,255';
-            
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-
-                    if (dist < connectionDistance) {
-                        const opacity = 1 - (dist / connectionDistance);
-                        ctx.strokeStyle = `rgba(${baseColor}, ${opacity * 0.25})`;
-                        ctx.lineWidth = 1;
-                        ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
+        class FlowLine {
+            constructor(y) {
+                this.y = y;
+                this.points = [];
+                this.speed = 0.002 + Math.random() * 0.003;
+                this.offset = Math.random() * 100;
+                this.amplitude = 50 + Math.random() * 100;
+                this.colorOffset = Math.random() * 360;
+                
+                // 初始化点
+                const spacing = 100;
+                const numPoints = Math.ceil(window.innerWidth / spacing) + 2;
+                for(let i = 0; i < numPoints; i++) {
+                    this.points.push({
+                        x: i * spacing,
+                        originalY: y,
+                        phase: Math.random() * Math.PI * 2
+                    });
                 }
             }
-        }
 
-        // 极光/渐变背景绘制
-        let gradientOffset = 0;
-        function drawBackground() {
-            const isLight = document.body.classList.contains('light-theme');
-            if (!isLight) {
-                // 深色模式：增强的动态光斑
-                const gradient1 = ctx.createRadialGradient(
-                    width * 0.3 + Math.sin(gradientOffset) * 100,
-                    height * 0.3 + Math.cos(gradientOffset) * 100,
-                    0,
-                    width * 0.3 + Math.sin(gradientOffset) * 100,
-                    height * 0.3 + Math.cos(gradientOffset) * 100,
-                    800
-                );
-                gradient1.addColorStop(0, 'rgba(99, 102, 241, 0.12)');
-                gradient1.addColorStop(1, 'rgba(5, 5, 5, 0)');
-                ctx.fillStyle = gradient1;
-                ctx.fillRect(0, 0, width, height);
-
-                const gradient2 = ctx.createRadialGradient(
-                    width * 0.7 - Math.sin(gradientOffset * 0.8) * 100,
-                    height * 0.7 - Math.cos(gradientOffset * 0.8) * 100,
-                    0,
-                    width * 0.7 - Math.sin(gradientOffset * 0.8) * 100,
-                    height * 0.7 - Math.cos(gradientOffset * 0.8) * 100,
-                    600
-                );
-                gradient2.addColorStop(0, 'rgba(168, 85, 247, 0.1)');
-                gradient2.addColorStop(1, 'rgba(5, 5, 5, 0)');
-                ctx.fillStyle = gradient2;
-                ctx.fillRect(0, 0, width, height);
-
-            } else {
-                // 浅色模式：增强的暖色光晕
-                const gradient = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, width);
-                gradient.addColorStop(0, `rgba(99, 102, 241, ${0.08 + Math.cos(gradientOffset) * 0.02})`);
-                gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-                ctx.fillStyle = gradient;
-                ctx.fillRect(0, 0, width, height);
+            update() {
+                this.points.forEach((p, i) => {
+                    // 复杂的波动方程：主波 + 次波 + 时间偏移
+                    const wave1 = Math.sin(t * this.speed + p.phase + i * 0.2);
+                    const wave2 = Math.cos(t * this.speed * 1.5 + p.phase - i * 0.1);
+                    p.y = p.originalY + (wave1 + wave2) * this.amplitude * 0.5;
+                });
             }
-            gradientOffset += 0.005;
+
+            draw(isLight) {
+                ctx.beginPath();
+                let p0 = this.points[0];
+                ctx.moveTo(p0.x, p0.y);
+
+                // 平滑曲线连接
+                for (let i = 1; i < this.points.length - 1; i++) {
+                    const p1 = this.points[i];
+                    const p2 = this.points[i + 1];
+                    const xc = (p1.x + p2.x) / 2;
+                    const yc = (p1.y + p2.y) / 2;
+                    ctx.quadraticCurveTo(p1.x, p1.y, xc, yc);
+                }
+                
+                // 渐变色
+                const gradient = ctx.createLinearGradient(0, 0, width, 0);
+                const hue = (t * 0.5 + this.colorOffset) % 360;
+                
+                if (isLight) {
+                    gradient.addColorStop(0, `hsla(${hue}, 80%, 60%, 0)`);
+                    gradient.addColorStop(0.5, `hsla(${hue + 60}, 80%, 60%, 0.3)`);
+                    gradient.addColorStop(1, `hsla(${hue + 120}, 80%, 60%, 0)`);
+                    ctx.lineWidth = 3;
+                } else {
+                    // 深色模式：高亮流光
+                    gradient.addColorStop(0, `hsla(${hue}, 70%, 60%, 0)`);
+                    gradient.addColorStop(0.5, `hsla(${hue + 40}, 90%, 65%, 0.4)`);
+                    gradient.addColorStop(1, `hsla(${hue + 80}, 70%, 60%, 0)`);
+                    ctx.lineWidth = 2;
+                    ctx.shadowBlur = 15;
+                    ctx.shadowColor = `hsla(${hue + 40}, 90%, 65%, 0.5)`;
+                }
+
+                ctx.strokeStyle = gradient;
+                ctx.stroke();
+                ctx.shadowBlur = 0; // 重置
+            }
         }
+
+        function initLines() {
+            lines = [];
+            const count = 8;
+            const step = height / count;
+            for(let i = 0; i < count; i++) {
+                lines.push(new FlowLine(i * step + step/2));
+            }
+        }
+
+        resize();
 
         function animate() {
             ctx.clearRect(0, 0, width, height);
+            t += 1;
             
-            drawBackground();
+            const isLight = document.body.classList.contains('light-theme');
             
-            particles.forEach(p => {
-                p.update();
-                p.draw();
+            // 绘制背景
+            if (!isLight) {
+                // 深色模式加一点微弱的径向背景
+                const bgGrad = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, width);
+                bgGrad.addColorStop(0, '#0a0a0f');
+                bgGrad.addColorStop(1, '#000000');
+                ctx.fillStyle = bgGrad;
+                ctx.fillRect(0, 0, width, height);
+            }
+
+            lines.forEach(line => {
+                line.update();
+                line.draw(isLight);
             });
-            
-            drawConnections();
             
             requestAnimationFrame(animate);
         }
