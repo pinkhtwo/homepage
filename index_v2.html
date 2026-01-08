@@ -517,119 +517,140 @@
             }
         });
 
-        // 艺术流光线条背景动画
+        // Linear 风格网格光束动画
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let width, height;
-        let lines = [];
-        let t = 0;
+        let beams = [];
+        const gridSize = 60; // 必须与 CSS 中的 background-size 保持一致
 
         function resize() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
-            initLines();
         }
         window.addEventListener('resize', resize);
+        resize();
 
-        class FlowLine {
-            constructor(y) {
-                this.y = y;
-                this.points = [];
-                this.speed = 0.002 + Math.random() * 0.003;
-                this.offset = Math.random() * 100;
-                this.amplitude = 50 + Math.random() * 100;
-                this.colorOffset = Math.random() * 360;
+        class Beam {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                // 随机选择是横向还是纵向
+                this.axis = Math.random() > 0.5 ? 'x' : 'y';
                 
-                // 初始化点
-                const spacing = 100;
-                const numPoints = Math.ceil(window.innerWidth / spacing) + 2;
-                for(let i = 0; i < numPoints; i++) {
-                    this.points.push({
-                        x: i * spacing,
-                        originalY: y,
-                        phase: Math.random() * Math.PI * 2
-                    });
+                if (this.axis === 'x') {
+                    this.x = Math.random() * width;
+                    // 确保对齐网格线
+                    this.y = Math.floor(Math.random() * (height / gridSize)) * gridSize;
+                    this.vx = (Math.random() > 0.5 ? 1 : -1) * (1 + Math.random()); // 随机方向和速度
+                    this.vy = 0;
+                    this.length = 100 + Math.random() * 200; // 光束长度
+                } else {
+                    this.x = Math.floor(Math.random() * (width / gridSize)) * gridSize;
+                    this.y = Math.random() * height;
+                    this.vx = 0;
+                    this.vy = (Math.random() > 0.5 ? 1 : -1) * (1 + Math.random());
+                    this.length = 100 + Math.random() * 200;
                 }
+
+                this.life = 1; // 生命值，用于淡出
+                this.decay = 0.005 + Math.random() * 0.01;
+                this.color = Math.random() * 360; // 色相
             }
 
             update() {
-                this.points.forEach((p, i) => {
-                    // 复杂的波动方程：主波 + 次波 + 时间偏移
-                    const wave1 = Math.sin(t * this.speed + p.phase + i * 0.2);
-                    const wave2 = Math.cos(t * this.speed * 1.5 + p.phase - i * 0.1);
-                    p.y = p.originalY + (wave1 + wave2) * this.amplitude * 0.5;
-                });
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life -= this.decay;
+
+                // 如果超出屏幕或生命值耗尽，重置
+                if (this.life <= 0 ||
+                    this.x < -this.length || this.x > width + this.length ||
+                    this.y < -this.length || this.y > height + this.length) {
+                    this.reset();
+                }
             }
 
             draw(isLight) {
                 ctx.beginPath();
-                let p0 = this.points[0];
-                ctx.moveTo(p0.x, p0.y);
-
-                // 平滑曲线连接
-                for (let i = 1; i < this.points.length - 1; i++) {
-                    const p1 = this.points[i];
-                    const p2 = this.points[i + 1];
-                    const xc = (p1.x + p2.x) / 2;
-                    const yc = (p1.y + p2.y) / 2;
-                    ctx.quadraticCurveTo(p1.x, p1.y, xc, yc);
-                }
                 
-                // 渐变色
-                const gradient = ctx.createLinearGradient(0, 0, width, 0);
-                const hue = (t * 0.5 + this.colorOffset) % 360;
-                
-                if (isLight) {
-                    gradient.addColorStop(0, `hsla(${hue}, 80%, 60%, 0)`);
-                    gradient.addColorStop(0.5, `hsla(${hue + 60}, 80%, 60%, 0.3)`);
-                    gradient.addColorStop(1, `hsla(${hue + 120}, 80%, 60%, 0)`);
-                    ctx.lineWidth = 3;
+                // 创建渐变尾迹
+                let gradient;
+                if (this.axis === 'x') {
+                    gradient = ctx.createLinearGradient(
+                        this.vx > 0 ? this.x - this.length : this.x + this.length, this.y,
+                        this.x, this.y
+                    );
                 } else {
-                    // 深色模式：高亮流光
-                    gradient.addColorStop(0, `hsla(${hue}, 70%, 60%, 0)`);
-                    gradient.addColorStop(0.5, `hsla(${hue + 40}, 90%, 65%, 0.4)`);
-                    gradient.addColorStop(1, `hsla(${hue + 80}, 70%, 60%, 0)`);
-                    ctx.lineWidth = 2;
-                    ctx.shadowBlur = 15;
-                    ctx.shadowColor = `hsla(${hue + 40}, 90%, 65%, 0.5)`;
+                    gradient = ctx.createLinearGradient(
+                        this.x, this.vy > 0 ? this.y - this.length : this.y + this.length,
+                        this.x, this.y
+                    );
                 }
+
+                const alpha = this.life * (isLight ? 0.5 : 0.8);
+                const color = isLight ? '99, 102, 241' : '129, 140, 248'; // Indigo 色系
+
+                gradient.addColorStop(0, `rgba(${color}, 0)`);
+                gradient.addColorStop(1, `rgba(${color}, ${alpha})`);
 
                 ctx.strokeStyle = gradient;
+                ctx.lineWidth = 2;
+                ctx.lineCap = 'round';
+
+                if (this.axis === 'x') {
+                    ctx.moveTo(this.vx > 0 ? this.x - this.length : this.x + this.length, this.y);
+                    ctx.lineTo(this.x, this.y);
+                } else {
+                    ctx.moveTo(this.x, this.vy > 0 ? this.y - this.length : this.y + this.length);
+                    ctx.lineTo(this.x, this.y);
+                }
+                
+                // 深色模式添加发光效果
+                if (!isLight) {
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = `rgba(${color}, ${alpha})`;
+                }
+                
                 ctx.stroke();
-                ctx.shadowBlur = 0; // 重置
+                ctx.shadowBlur = 0;
             }
         }
 
-        function initLines() {
-            lines = [];
-            const count = 8;
-            const step = height / count;
-            for(let i = 0; i < count; i++) {
-                lines.push(new FlowLine(i * step + step/2));
+        // 初始化光束
+        function initBeams() {
+            beams = [];
+            const count = 15; // 光束数量
+            for(let i=0; i<count; i++) {
+                beams.push(new Beam());
             }
         }
-
-        resize();
+        initBeams();
 
         function animate() {
             ctx.clearRect(0, 0, width, height);
-            t += 1;
             
             const isLight = document.body.classList.contains('light-theme');
             
-            // 绘制背景
+            // 绘制背景底色（配合 CSS 网格）
             if (!isLight) {
-                // 深色模式加一点微弱的径向背景
-                const bgGrad = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, width);
-                bgGrad.addColorStop(0, '#0a0a0f');
-                bgGrad.addColorStop(1, '#000000');
+                // 深色模式：顶部深蓝光晕，底部纯黑
+                const bgGrad = ctx.createRadialGradient(width/2, 0, 0, width/2, 0, height);
+                bgGrad.addColorStop(0, 'rgba(15, 23, 42, 1)'); // Slate-900
+                bgGrad.addColorStop(1, 'rgba(2, 6, 23, 1)');   // Slate-950
                 ctx.fillStyle = bgGrad;
+                ctx.fillRect(0, 0, width, height);
+            } else {
+                // 浅色模式：纯白
+                ctx.fillStyle = '#ffffff';
                 ctx.fillRect(0, 0, width, height);
             }
 
-            lines.forEach(line => {
-                line.update();
-                line.draw(isLight);
+            beams.forEach(b => {
+                b.update();
+                b.draw(isLight);
             });
             
             requestAnimationFrame(animate);
