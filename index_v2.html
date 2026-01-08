@@ -366,7 +366,7 @@
     <section class="hero">
         <div class="hero-badge">
             <span class="status-dot"></span>
-            All Systems Operational
+            所有系统运行正常
         </div>
         <h1 class="hero-title">
             统一的大模型<br>
@@ -532,111 +532,131 @@
             }
         });
 
-        // 全新设计的 Mesh Gradient (弥散光) 背景动画
+        // 恢复并优化背景动画：星座连线 + 极光效果
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let width, height;
-        let blobs = [];
+        let particles = [];
+        const particleCount = 80;
+        const connectionDistance = 160;
 
         function resize() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
-            initBlobs(); // Resize 时重置光球位置
         }
         window.addEventListener('resize', resize);
-        
-        class Blob {
-            constructor(color, x, y, r, vx, vy) {
-                this.color = color;
-                this.x = x;
-                this.y = y;
-                this.r = r; // 半径
-                this.vx = vx;
-                this.vy = vy;
-                this.initialX = x;
-                this.initialY = y;
-                this.angle = Math.random() * Math.PI * 2;
-            }
+        resize();
 
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2 + 1.5;
+            }
             update() {
-                // 让光球在一定范围内做平滑的圆周/正弦运动，而不是直线反弹，这样更柔和
-                this.angle += 0.002;
-                this.x = this.initialX + Math.sin(this.angle) * 100;
-                this.y = this.initialY + Math.cos(this.angle * 0.8) * 100;
-            }
+                this.x += this.vx;
+                this.y += this.vy;
 
-            draw(isLight) {
-                const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r);
-                // 根据主题调整透明度
-                const alpha = isLight ? 0.6 : 0.25;
-                gradient.addColorStop(0, this.color.replace('ALPHA', alpha));
-                gradient.addColorStop(1, this.color.replace('ALPHA', '0'));
-                
-                ctx.fillStyle = gradient;
+                if (this.x < 0) this.x = width;
+                if (this.x > width) this.x = 0;
+                if (this.y < 0) this.y = height;
+                if (this.y > height) this.y = 0;
+            }
+            draw() {
+                const isLight = document.body.classList.contains('light-theme');
+                ctx.fillStyle = isLight ? 'rgba(0,0,0,0.3)' : 'rgba(255,255,255,0.4)';
                 ctx.beginPath();
-                ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
             }
         }
 
-        function initBlobs() {
-            blobs = [];
-            // 定义光球配置：颜色占位符 ALPHA 会在 draw 时替换
-            // 浅色模式下我们希望色彩更丰富（蓝、紫、粉、橙）
-            // 深色模式下我们希望色彩深邃（深蓝、深紫）
+        function initParticles() {
+            particles = [];
+            for(let i=0; i<particleCount; i++) particles.push(new Particle());
+        }
+        initParticles();
+
+        function drawConnections() {
+            const isLight = document.body.classList.contains('light-theme');
+            const baseColor = isLight ? '0,0,0' : '255,255,255';
             
-            // 这里我们定义通用的颜色变量，在 draw 时根据主题映射具体颜色值会更灵活，
-            // 但为了简单高效，我们直接创建两套配置，在 animate 中选择。
-            
-            // 我们创建 5 个光球分布在屏幕不同位置
-            blobs.push(new Blob('rgba(99, 102, 241, ALPHA)', width * 0.2, height * 0.3, width * 0.5, 0.5, 0.5)); // Indigo
-            blobs.push(new Blob('rgba(168, 85, 247, ALPHA)', width * 0.8, height * 0.2, width * 0.6, -0.5, 0.5)); // Purple
-            blobs.push(new Blob('rgba(59, 130, 246, ALPHA)', width * 0.5, height * 0.8, width * 0.6, 0.2, -0.2)); // Blue
-            blobs.push(new Blob('rgba(236, 72, 153, ALPHA)', width * 0.1, height * 0.8, width * 0.5, 0.3, 0.3)); // Pink
-            blobs.push(new Blob('rgba(14, 165, 233, ALPHA)', width * 0.9, height * 0.6, width * 0.5, -0.3, -0.3)); // Sky
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < connectionDistance) {
+                        const opacity = 1 - (dist / connectionDistance);
+                        ctx.strokeStyle = `rgba(${baseColor}, ${opacity * 0.25})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
         }
 
-        resize(); // 初始化
+        // 极光/渐变背景绘制
+        let gradientOffset = 0;
+        function drawBackground() {
+            const isLight = document.body.classList.contains('light-theme');
+            if (!isLight) {
+                // 深色模式：增强的动态光斑
+                const gradient1 = ctx.createRadialGradient(
+                    width * 0.3 + Math.sin(gradientOffset) * 100,
+                    height * 0.3 + Math.cos(gradientOffset) * 100,
+                    0,
+                    width * 0.3 + Math.sin(gradientOffset) * 100,
+                    height * 0.3 + Math.cos(gradientOffset) * 100,
+                    800
+                );
+                gradient1.addColorStop(0, 'rgba(99, 102, 241, 0.12)');
+                gradient1.addColorStop(1, 'rgba(5, 5, 5, 0)');
+                ctx.fillStyle = gradient1;
+                ctx.fillRect(0, 0, width, height);
+
+                const gradient2 = ctx.createRadialGradient(
+                    width * 0.7 - Math.sin(gradientOffset * 0.8) * 100,
+                    height * 0.7 - Math.cos(gradientOffset * 0.8) * 100,
+                    0,
+                    width * 0.7 - Math.sin(gradientOffset * 0.8) * 100,
+                    height * 0.7 - Math.cos(gradientOffset * 0.8) * 100,
+                    600
+                );
+                gradient2.addColorStop(0, 'rgba(168, 85, 247, 0.1)');
+                gradient2.addColorStop(1, 'rgba(5, 5, 5, 0)');
+                ctx.fillStyle = gradient2;
+                ctx.fillRect(0, 0, width, height);
+
+            } else {
+                // 浅色模式：增强的暖色光晕
+                const gradient = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, width);
+                gradient.addColorStop(0, `rgba(99, 102, 241, ${0.08 + Math.cos(gradientOffset) * 0.02})`);
+                gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, width, height);
+            }
+            gradientOffset += 0.005;
+        }
 
         function animate() {
             ctx.clearRect(0, 0, width, height);
             
-            const isLight = document.body.classList.contains('light-theme');
+            drawBackground();
             
-            // 混合模式：让光球叠加产生漂亮的混合色
-            // 浅色模式用 multiply 或 normal，深色模式用 screen 或 lighter
-            ctx.globalCompositeOperation = isLight ? 'multiply' : 'screen';
-
-            // 绘制背景底色
-            if (isLight) {
-                // 浅色模式底色：极淡的灰白
-                ctx.globalCompositeOperation = 'source-over';
-                ctx.fillStyle = '#ffffff';
-                ctx.fillRect(0, 0, width, height);
-                ctx.globalCompositeOperation = 'multiply'; // 恢复混合模式
-            } else {
-                // 深色模式底色：纯黑
-                ctx.globalCompositeOperation = 'source-over';
-                ctx.fillStyle = '#050505';
-                ctx.fillRect(0, 0, width, height);
-                ctx.globalCompositeOperation = 'screen'; // 恢复混合模式
-            }
-
-            blobs.forEach(blob => {
-                blob.update();
-                // 针对不同模式微调颜色
-                let color = blob.color;
-                if (isLight) {
-                    // 浅色模式：使用柔和的粉彩
-                    // 替换颜色逻辑：这里简单处理，实际可以用更复杂的映射
-                    // 保持原色，但透明度在 draw 中控制
-                } else {
-                    // 深色模式：颜色保持，但透明度较低
-                }
-                blob.draw(isLight);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
             });
-
-            ctx.globalCompositeOperation = 'source-over'; // 恢复默认
+            
+            drawConnections();
+            
             requestAnimationFrame(animate);
         }
         animate();
