@@ -43,52 +43,6 @@
             transition: background-color 0.3s ease;
         }
 
-        /* 顶部导航 */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid transparent;
-            transition: all 0.3s ease;
-        }
-        
-        .navbar.scrolled {
-            background: rgba(5, 5, 5, 0.5);
-            border-bottom: 1px solid var(--border-color);
-            padding: 16px 40px;
-        }
-
-        .logo {
-            font-weight: 800;
-            font-size: 20px;
-            background: var(--gradient-title);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 24px;
-        }
-
-        .nav-link {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-
-        .nav-link:hover { color: var(--text-main); }
-
         /* Hero 区域 */
         .hero {
             min-height: 100vh;
@@ -377,15 +331,6 @@
 <body>
     <canvas id="bg-canvas"></canvas>
 
-    <nav class="navbar">
-        <div class="logo">DEMO API</div>
-        <div class="nav-links">
-            <a href="https://docs.newapi.pro/" target="_blank" class="nav-link">文档</a>
-            <a href="https://api.demokt.me/pricing" class="nav-link">价格</a>
-            <a href="https://api.demokt.me/console" class="btn btn-primary" style="padding: 8px 20px; font-size: 14px;">控制台</a>
-        </div>
-    </nav>
-
     <section class="hero">
         <div class="hero-badge">✨ 全新升级 V1.0</div>
         <h1 class="hero-title">
@@ -552,11 +497,13 @@
             }
         });
 
-        // 简单的背景粒子动画
+        // 增强版背景动画：星座连线 + 极光效果
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let width, height;
         let particles = [];
+        const particleCount = 60;
+        const connectionDistance = 150;
 
         function resize() {
             width = canvas.width = window.innerWidth;
@@ -569,32 +516,92 @@
             constructor() {
                 this.x = Math.random() * width;
                 this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.size = Math.random() * 2;
+                this.vx = (Math.random() - 0.5) * 0.3;
+                this.vy = (Math.random() - 0.5) * 0.3;
+                this.size = Math.random() * 2 + 1;
             }
             update() {
                 this.x += this.vx;
                 this.y += this.vy;
-                if (this.x < 0 || this.x > width) this.vx *= -1;
-                if (this.y < 0 || this.y > height) this.vy *= -1;
+
+                if (this.x < 0) this.x = width;
+                if (this.x > width) this.x = 0;
+                if (this.y < 0) this.y = height;
+                if (this.y > height) this.y = 0;
             }
             draw() {
-                ctx.fillStyle = document.body.classList.contains('light-theme') ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.1)';
+                const isLight = document.body.classList.contains('light-theme');
+                ctx.fillStyle = isLight ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.15)';
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
             }
         }
 
-        for(let i=0; i<50; i++) particles.push(new Particle());
+        function initParticles() {
+            particles = [];
+            for(let i=0; i<particleCount; i++) particles.push(new Particle());
+        }
+        initParticles();
+
+        function drawConnections() {
+            const isLight = document.body.classList.contains('light-theme');
+            const baseColor = isLight ? '0,0,0' : '255,255,255';
+            
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < connectionDistance) {
+                        const opacity = 1 - (dist / connectionDistance);
+                        ctx.strokeStyle = `rgba(${baseColor}, ${opacity * 0.1})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        // 极光/渐变背景绘制
+        let gradientOffset = 0;
+        function drawBackground() {
+            const isLight = document.body.classList.contains('light-theme');
+            if (!isLight) {
+                // 深色模式：微弱的极光效果
+                const gradient = ctx.createLinearGradient(0, 0, width, height);
+                gradient.addColorStop(0, 'rgba(5, 5, 5, 0)');
+                gradient.addColorStop(0.5, `rgba(99, 102, 241, ${0.03 + Math.sin(gradientOffset) * 0.01})`); // 动态透明度
+                gradient.addColorStop(1, 'rgba(5, 5, 5, 0)');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, width, height);
+            } else {
+                // 浅色模式：柔和的暖色光晕
+                const gradient = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, width);
+                gradient.addColorStop(0, `rgba(99, 102, 241, ${0.02 + Math.cos(gradientOffset) * 0.01})`);
+                gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, width, height);
+            }
+            gradientOffset += 0.005;
+        }
 
         function animate() {
             ctx.clearRect(0, 0, width, height);
+            
+            drawBackground();
+            
             particles.forEach(p => {
                 p.update();
                 p.draw();
             });
+            
+            drawConnections();
+            
             requestAnimationFrame(animate);
         }
         animate();
